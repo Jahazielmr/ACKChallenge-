@@ -2,6 +2,8 @@ package com.qualitystream.tutorial;
 
 import static org.junit.Assert.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.junit.Assert;
@@ -239,6 +241,41 @@ public class ParkingCalculatorTests {
 		Thread.sleep(6000);
 		
 		assertEquals("ERROR! YOUR LEAVING DATE OR TIME IS BEFORE YOUR STARTING DATE OR TIME", fonts.get(1).getText());
+		
+		
+		
+	}
+	
+	
+	@Test 
+	public void BugDetected() throws InterruptedException {
+		
+		WebElement calculate_bt = driver.findElement(By.name("Submit"));
+		calculate_bt.click();
+		Thread.sleep(6000);
+		// We are pressing the calculate button without setting up the fieldboxes 
+	
+		List<WebElement> btag = driver.findElements(By.tagName("b")); // The warning messages doesn't have an ID or name, I got then creating a list with b tags.
+		
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"); //Getting current date and time to report the bug
+		LocalDateTime now = LocalDateTime.now();  
+		  
+		
+		if(btag.get(0).getText().equals("Warning") || btag.get(3).getText().equals("Warning")) {
+			
+			System.out.print("Unexpected Error, we shouldn't show to the user information about or code");
+			
+			System.out.println("----- A bug has been detected, on the main page screen, pressing the calculate button without select anything else -----");
+			System.out.println("Error Message: Warning: mktime() expects at most 6 parameters, 7 given in /www/htdocs/w007846d/parkcalc/adodb-time.inc.php on line 732\r\n" + 
+				"\r\n" + 
+				"Warning: gmmktime() expects at most 6 parameters, 7 given in /www/htdocs/w007846d/parkcalc/adodb-time.inc.php on line 732");
+			System.out.print("Found it using a HP computer HP EliteBook 840 G3 Notebook/ Windows 10 OS / WebBrowser: Chrome 85.0.4183.121 @" + dtf.format(now));
+			
+			assertNotEquals(btag.get(0).getText(), "Warning");
+			
+		} else {
+			assertNotEquals(btag.get(0).getText(), "Warning");
+		}
 		
 		
 		
