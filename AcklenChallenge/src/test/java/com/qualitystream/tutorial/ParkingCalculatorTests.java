@@ -12,6 +12,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
 
 public class ParkingCalculatorTests {
 
@@ -110,6 +111,79 @@ public class ParkingCalculatorTests {
 		assertEquals("ERROR! ENTER A CORRECTLY FORMATTED DATE", fonts.get(1).getText());
 		
 		Thread.sleep(6000);
+		
+	}
+	
+	
+	//Complete test and check functionality & calculation on Parking Lot
+	
+	@Test
+	public void completeTestGoodone() throws InterruptedException {
+		//All inputs
+		
+		WebElement startingDate_box = driver.findElement(By.name("StartingDate"));
+		startingDate_box.clear();
+		
+		WebElement startingTime_box = driver.findElement(By.name("StartingTime"));
+		startingTime_box.clear();
+		
+		//WebElement radioPM = driver.findElement(By.xpath("//input[@value='PM']"));
+		
+		WebElement endingDate_box = driver.findElement(By.name("LeavingDate"));
+		endingDate_box.clear();
+		
+		WebElement endingTime_box = driver.findElement(By.name("LeavingTime"));
+		endingTime_box.clear();
+		
+		WebElement selectParking = driver.findElement(By.name("ParkingLot"));
+		Select s_Parking = new Select(selectParking);
+		
+		WebElement calculate_bt = driver.findElement(By.name("Submit"));
+		
+		//----------------------------------------------------------------------------------------
+		
+		startingDate_box.sendKeys("10/11/2020");
+		startingTime_box.sendKeys("10:00");
+		//
+		
+		endingDate_box.sendKeys("10/18/2020");
+		endingTime_box.sendKeys("10:00");
+		
+		s_Parking.selectByIndex(2);// We will select the Economy lot for this one. we will check if the user is getting the 7th day free.
+		
+		Thread.sleep(6000);
+		
+		calculate_bt.click();
+		
+		//He should be charged with 54$ about a 7 days. 7th day is for free.
+		
+		List<WebElement> fonts = driver.findElements(By.className("SubHead"));//Getting the calculation result.
+		
+		int charge=0;
+		for(int i=0; i<7; i++) {
+			
+			int total=0;
+			total=total+(9*i);
+			
+			charge=total;
+			
+		}
+		
+		String charget="$ "+charge+".00";
+		
+		if(fonts.get(1).getText().equals(charget)) {
+			
+			System.out.print("Correct Calculation");
+			
+		} else {
+			
+			System.out.print("Wrong calculation");
+		
+		}
+		
+		Thread.sleep(6000);
+		
+		assertEquals(charget, fonts.get(1).getText());
 		
 	}
 	
