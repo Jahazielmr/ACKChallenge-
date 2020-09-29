@@ -72,6 +72,48 @@ public class ParkingCalculatorTests {
 	}
 	
 	
+	//Leaving Date Inputs only
+	
+	@Test
+	public void testEndDateInput() throws InterruptedException {
+		//getting EndDate inputs and submit button
+	
+		WebElement endingDate_box = driver.findElement(By.name("LeavingDate"));
+		endingDate_box.clear();
+		
+		WebElement endingTime_box = driver.findElement(By.name("LeavingTime"));
+		endingTime_box.clear();
+		
+		WebElement calculate_bt = driver.findElement(By.name("Submit"));
+		
+		//------------------------------------------------------------------------------
+		
+		endingDate_box.sendKeys("12/10/2019");
+		endingTime_box.sendKeys("8:00");
+		
+		Thread.sleep(6000);
+		
+		calculate_bt.click();
+		
+		List<WebElement> fonts = driver.findElements(By.className("SubHead"));// getting the error message using an array list of the subheads.
+		
+		if(fonts.get(1).getText().equals("ERROR! ENTER A CORRECTLY FORMATTED DATE")) {
+			
+			System.out.print("Expected Error");
+			
+		} else {
+			
+			System.out.print("We need to tell the user that he needs to nter a correctly formatted date");
+		
+		}
+		
+		assertEquals("ERROR! ENTER A CORRECTLY FORMATTED DATE", fonts.get(1).getText());
+		
+		Thread.sleep(6000);
+		
+	}
+	
+	
 	@After
 	public void tearDown(){
 		driver.quit();
