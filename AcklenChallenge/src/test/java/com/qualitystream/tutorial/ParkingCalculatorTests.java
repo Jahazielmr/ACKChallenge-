@@ -188,6 +188,63 @@ public class ParkingCalculatorTests {
 	}
 	
 	
+	// Bad one 
+	
+	@Test
+	public void completeTestBadone() throws InterruptedException {
+		//All inputs 
+		
+		WebElement startingDate_box = driver.findElement(By.name("StartingDate"));
+		startingDate_box.clear();
+		
+		WebElement startingTime_box = driver.findElement(By.name("StartingTime"));
+		startingTime_box.clear();
+		
+		WebElement radioPM = driver.findElement(By.xpath("//input[@value='PM']")); 
+		
+		WebElement endingDate_box = driver.findElement(By.name("LeavingDate"));
+		endingDate_box.clear();
+		
+		WebElement endingTime_box = driver.findElement(By.name("LeavingTime"));
+		endingTime_box.clear();
+				
+		WebElement selectParking = driver.findElement(By.name("ParkingLot"));
+		Select s_Parking = new Select(selectParking);
+				
+		WebElement calculate_bt = driver.findElement(By.name("Submit"));
+				
+		//------------------------------------------------------------------------------
+		
+		startingDate_box.sendKeys("10/18/2020");
+		startingTime_box.sendKeys("10:00");
+		radioPM.click();
+		
+		endingDate_box.sendKeys("10/11/2020");
+		endingTime_box.sendKeys("10:00");
+		
+		s_Parking.selectByIndex(2);//We will select the Short-Term Parkin on this one.
+		
+		Thread.sleep(6000);
+		
+		calculate_bt.click();
+		
+		List<WebElement> fonts = driver.findElements(By.className("SubHead"));
+		
+		if(fonts.get(1).getText().equals("ERROR! YOUR LEAVING DATE OR TIME IS BEFORE YOUR STARTING DATE OR TIME")) {
+			System.out.print("Expected error");
+		} else {
+			System.out.print("We need to show a message telling the user that his leaving date or time is before the starting date or time");
+		}
+		
+		Thread.sleep(6000);
+		
+		assertEquals("ERROR! YOUR LEAVING DATE OR TIME IS BEFORE YOUR STARTING DATE OR TIME", fonts.get(1).getText());
+		
+		
+		
+	}
+	
+	
 	@After
 	public void tearDown(){
 		driver.quit();
